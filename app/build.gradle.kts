@@ -33,6 +33,7 @@ android {
     namespace = "me.magnum.melonds"
     compileSdk = AppConfig.compileSdkVersion
     ndkVersion = AppConfig.ndkVersion
+    buildToolsVersion = AppConfig.buildToolsVersion
     defaultConfig {
         applicationId = "me.magnum.melondualds"
         minSdk = AppConfig.minSdkVersion
@@ -42,7 +43,7 @@ android {
         manifestPlaceholders["appName"] = "@string/app_name"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86_64"))
+            abiFilters.addAll(listOf("arm64-v8a"))
         }
         externalNativeBuild {
             cmake {
@@ -112,7 +113,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("CMakeLists.txt")
-            version = "3.22.1"
+            version = AppConfig.cmakeVersion
         }
     }
     sourceSets {
@@ -235,18 +236,6 @@ val librashaderAbiTargets = listOf(
         rustTarget = "aarch64-linux-android",
         ndkLibTriple = "aarch64-linux-android",
         clangPrefix = "aarch64-linux-android",
-    ),
-    LibrashaderAbiTarget(
-        abi = "armeabi-v7a",
-        rustTarget = "armv7-linux-androideabi",
-        ndkLibTriple = "arm-linux-androideabi",
-        clangPrefix = "armv7a-linux-androideabi",
-    ),
-    LibrashaderAbiTarget(
-        abi = "x86_64",
-        rustTarget = "x86_64-linux-android",
-        ndkLibTriple = "x86_64-linux-android",
-        clangPrefix = "x86_64-linux-android",
     ),
 )
 

@@ -7,6 +7,7 @@ plugins {
 android {
     namespace = "com.smp.masterswitchpreference"
     compileSdk = AppConfig.compileSdkVersion
+    buildToolsVersion = AppConfig.buildToolsVersion
 
     defaultConfig {
         minSdk = AppConfig.minSdkVersion
