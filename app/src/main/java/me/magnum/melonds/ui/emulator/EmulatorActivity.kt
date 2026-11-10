@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.util.TypedValue
+import android.util.Log
 import android.view.Display
 import android.view.Gravity
 import android.view.KeyEvent
@@ -1601,7 +1602,13 @@ class EmulatorActivity : AppCompatActivity() {
                     setPauseOverlayVisibility(true)
                 }
 
-                show()
+                try {
+                    show()
+                } catch (e: WindowManager.InvalidDisplayException) {
+                    Log.w("EmulatorActivity", "Secondary display rejected: ${e.message}")
+                    presentation = null
+                    return
+                }
             }
             if (showBootAnimation.value) {
                 showBootAnimationOnExternalDisplay()

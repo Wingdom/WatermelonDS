@@ -65,7 +65,6 @@ class RomDetailsActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        externalInfoController.attach()
         externalInfoController.setContent {
             val rom = romDetailsViewModel.rom.collectAsState().value
             val achievement = focusedAchievement.collectAsState().value
@@ -95,13 +94,20 @@ class RomDetailsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
+    // Released in onPause rather than onStop: the next activity's onStart() runs first,
+    // and a display hosts only one Presentation at a time.
+    override fun onPause() {
         externalInfoController.detach()
+        super.onPause()
+    }
+
+    override fun onStop() {
         super.onStop()
     }
 
     override fun onResume() {
         super.onResume()
+        externalInfoController.attach()
         romRetroAchievementsViewModel.refreshOfflineAchievementsStatus()
     }
 
