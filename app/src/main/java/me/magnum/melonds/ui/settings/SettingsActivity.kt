@@ -49,7 +49,6 @@ class SettingsActivity :
 
     override fun onStart() {
         super.onStart()
-        externalInfoController.attach()
         externalSettingsTitle.value = supportActionBar?.title?.toString() ?: getString(me.magnum.melonds.R.string.settings)
         supportFragmentManager.addOnBackStackChangedListener(externalTitleListener)
         externalInfoController.setContent {
@@ -64,9 +63,20 @@ class SettingsActivity :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        externalInfoController.attach()
+    }
+
+    // Released in onPause rather than onStop: the next activity's onStart() runs first,
+    // and a display hosts only one Presentation at a time.
+    override fun onPause() {
+        externalInfoController.detach()
+        super.onPause()
+    }
+
     override fun onStop() {
         supportFragmentManager.removeOnBackStackChangedListener(externalTitleListener)
-        externalInfoController.detach()
         super.onStop()
     }
 

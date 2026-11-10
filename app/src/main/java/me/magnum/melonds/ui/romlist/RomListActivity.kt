@@ -243,7 +243,6 @@ class RomListActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.refreshInstalledDsiWareShortcuts()
-        externalInfoController.attach()
         externalInfoController.setContent {
             val highlighted = highlightedRom.collectAsState().value
             val browser = viewModel.browserState.collectAsState().value
@@ -268,8 +267,19 @@ class RomListActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
+    override fun onResume() {
+        super.onResume()
+        externalInfoController.attach()
+    }
+
+    // Released in onPause rather than onStop: the next activity's onStart() runs first,
+    // and a display hosts only one Presentation at a time.
+    override fun onPause() {
         externalInfoController.detach()
+        super.onPause()
+    }
+
+    override fun onStop() {
         super.onStop()
     }
 
