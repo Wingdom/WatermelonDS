@@ -59,6 +59,10 @@ android {
     }
     buildTypes {
         getByName("release") {
+            // Fork build: coexist with the upstream app rather than conflict with it.
+            // This is signed with a different key, so Android cannot install one over
+            // the other; a distinct applicationId avoids forcing an uninstall.
+            applicationIdSuffix = ".thor"
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
