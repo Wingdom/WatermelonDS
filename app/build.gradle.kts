@@ -1,6 +1,12 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+// Fork build: the release keystore is applied with apksigner after packaging, so that
+// the signing password never has to live in local.properties. When no keystore is
+// configured here, emit an unsigned release APK rather than failing the build.
+val hasGradleReleaseKeystore =
+    (gradleLocalProperties(rootDir, providers)["MELONDS_KEYSTORE"] as String?)?.isNotBlank() == true
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -65,7 +71,7 @@ android {
             applicationIdSuffix = ".thor"
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasGradleReleaseKeystore) signingConfigs.getByName("release") else null
             externalNativeBuild {
                 cmake {
                     arguments("-DMELONDS_ANDROID_DEBUG_BUILD=0")
